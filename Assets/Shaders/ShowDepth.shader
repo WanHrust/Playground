@@ -4,7 +4,7 @@ Shader "Hidden/Show Depth"
 {
 	Properties
 	{
-		_Color ("Color", Color) = "white"
+		_Color("Color", Color) = (1,1,1,1)
 	}
 
 	SubShader
@@ -27,27 +27,23 @@ Shader "Hidden/Show Depth"
 			struct appdata
 			{
 				float4 vertex : POSITION;
-				float2 uv : TEXCOORD0;
 			};
 
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
-				float2 uv : TEXCOORD0;
 				float depth : DEPTH;
 			};
-
-		
-			float4 _Color;
 
 			v2f vert (appdata v)
 			{
 				v2f o;
 				o.vertex = UnityObjectToClipPos(v.vertex);
-				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.depth = -mul(UNITY_MATRIX_MV, v.vertex).z *_ProjectionParams.w;
 				return o;
 			}
+			
+			half4 _Color;
 
 			fixed4 frag (v2f i) : SV_Target
 			{
